@@ -1,9 +1,63 @@
 # Implicit-SDF-Planner
-Title: Continuous Implicit SDF Based Any-shape Robot Trajectory Optimization
+
+## Continuous Implicit SDF Based Any-shape Robot Trajectory Optimization
+
+Our paper is accepted at IROS2023, and we will release some of our code around the end of July.
 
 Preprint: [arxiv](https://arxiv.org/abs/2303.01330)
 
-[Video for the IROS submission](https://drive.google.com/file/d/1-QQZILtCd5WudsjGIY2Y1KUItSsiGuco/view)
+* [Video on Youtube](https://www.youtube.com/watch?v=Sb6HaVMZWak&ab_channel=FeiGao) or [Video on Bilibili](https://www.bilibili.com/video/BV1Rg4y1E79w/?spm_id_from=333.999.0.0)
 
+<a href="https://www.youtube.com/watch?v=Sb6HaVMZWak&ab_channel=FeiGao" target="blank">
+  <p align="center">
+    <img src="fig/head.png" width="800"/>
+  </p>
+</a>
 
-Our paper is currently under review, and the code will be released as our work is accepted.
+## Demos supported by our pipeline
+
+- Some of the demos are our **further work** after the IROS conference, and a more general pipeline for whole-body planning of arbitrarily shaped robots with **Continuous Collision Safety Certification** is on the way.
+  
+  #### Arbitrarily shaped robots fly over three consecutive narrow slits (with quadrotor dynamics)
+  
+  <div align="center">
+  <img src="fig/3Ddemo1.gif" width="48%" />
+  <img src="fig/3Ddemo2.gif" width="48%" />
+  </div>
+  <br>
+  <div align="center">
+  <img src="fig/3Ddemo3.gif" width="48%" />
+  <img src="fig/3Ddemo4.gif" width="48%" />
+  </div>
+
+#### Arbitrarily shaped robots traverse the random map (with rotation decoupled from translation)
+
+<div align="center">
+  <img src="fig/2Ddemo1.gif" width="48%" />
+  <img src="fig/2Ddemo2.gif" width="48%" />
+</div>
+<br>
+<div align="center">
+  <img src="fig/2Ddemo3.gif" width="48%" />
+  <img src="fig/2Ddemo4.gif" width="48%" />
+</div>
+
+#### Continuous Collision Avoidance with Safety Certification (with rotation decoupled from translation)
+
+<div align="center">
+  <img src="fig/CCA1.gif" width="95%" />
+</div>
+<br>
+<div align="center">
+  <img src="fig/CCA2.gif" width="95%" />
+</div>
+
+#### Obstacle avoidance planning for shape variant robots (with quadrotor dynamics)
+
+<div align="center">
+  <img src="fig/scaledemo1.gif" width="95%" />
+</div>
+<br>
+<div align="center">
+  <img src="fig/scaledemo2.gif" width="95%" />
+</div>
