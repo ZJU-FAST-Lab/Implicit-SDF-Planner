@@ -1,0 +1,56 @@
+{
+    "operations": [
+        {
+            "name": "sth TODO",
+            "id": 100
+        },
+        {
+            "name": "Render ori kernel",
+            "id": 101
+        },
+        {
+            "name": "visualize swept volume",
+            "id": 102
+        },
+        {
+            "name": "replay trajectory",
+            "id": 103
+        },
+        {
+            "name": "Render map kernel",
+            "id": 104
+        },
+        {
+            "name": "reshow the SE3 path",
+            "id": 105
+        },
+        {
+            "name": "show self SDF map",
+            "id": 106
+        },
+        {
+            "name": "show analytic SDF map",
+            "id": 109
+        },
+        {
+            "name": "Pub Target",
+            "id": 112
+        },
+        {
+            "name": "GeneMap By traj",
+            "id": 113
+        },
+        {
+            "name": "debug optimized ",
+            "id": 118
+        },
+        {
+            "name": "dump map as pcd ",
+            "id": 119
+        },
+        {
+            "name": "reset random map",
+            "id": 120
+        }
+    ]
+}

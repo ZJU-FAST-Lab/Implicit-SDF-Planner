@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>plan_manager</name>
+  <version>0.0.0</version>
+  <description>The plan_manager package</description>
+
+  <!-- One maintainer tag required, multiple allowed, one person per tag -->
+  <!-- Example:  -->
+  <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
+  <maintainer email="ztr@todo.todo">ztr</maintainer>
+
+
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <!-- Commonly used license strings: -->
+  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
+  <license>TODO</license>
+
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <!-- <build_depend>traj_opt</build_depend> -->
+  <build_depend>utils</build_depend>
+  <build_depend>swept_volume</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <!-- <build_export_depend>traj_opt</build_export_depend> -->
+  <build_export_depend>utils</build_export_depend>
+  <build_export_depend>swept_volume</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <!-- <exec_depend>traj_opt</exec_depend> -->
+  <exec_depend>utils</exec_depend>
+  <exec_depend>swept_volume</exec_depend>
+
+  <build_depend>map_manager</build_depend>
+  <build_export_depend>map_manager</build_export_depend>
+  <exec_depend>map_manager</exec_depend>
+
+  <build_depend>planner_algorithm</build_depend>
+  <build_export_depend>planner_algorithm</build_export_depend>
+  <exec_depend>planner_algorithm</exec_depend>
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

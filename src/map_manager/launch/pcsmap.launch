@@ -1,0 +1,22 @@
+<launch>
+
+<arg name="odom_topic" default="/odom"/>
+
+
+<!-- pcs_map manager -->
+	<node pkg="map_manager" name="pcsmap_manager" type="PCSmap_node" output="screen">
+
+	  <remap from="~globalmap"     to="/globalmap" />
+	  <remap from="~globalmap_vis" to="/globalmap_vis" />
+	  <remap from="~odom" to="$(arg odom_topic)"/>
+	  
+	</node>
+
+<!-- globalmap generator -->
+	<include file="$(find globalmap_gene)/launch/globalmap_gene.launch"/>
+
+
+<!-- rviz -->
+    	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find map_manager)/param/default.rviz" required="true" />
+
+</launch>

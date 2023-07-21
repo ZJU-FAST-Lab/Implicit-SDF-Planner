@@ -1,0 +1,13 @@
+devel/
+build/
+logs/
+# valgrind/
+*.catkin_workspace
+# *.txt
+vgcore*
+.vscode/
+*.pyc
+src/libtorch/
+src/debug_assistant/scripts/__pycache__/
+testlibiglthreadsafety/**
+obstacle_shapes/**

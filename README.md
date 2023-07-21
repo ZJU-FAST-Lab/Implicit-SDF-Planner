@@ -61,3 +61,18 @@ Preprint: [arxiv](https://arxiv.org/abs/2303.01330)
 <div align="center">
   <img src="fig/scaledemo2.gif" width="95%" />
 </div>
+
+Compiling tests passed on ubuntu 20.04 with ros installed. You can just execute the following commands one by one.
+## Qucik Start
+```sh
+echo "alias python=python3" >> ~/.zshrc  #(If use zsh) 
+echo "alias python=python3" >> ~/.bashrc #(If use bash)
+python3 -m pip3 install pygame==2.0.0.dev12 
+sudo apt-get install gcc g++ make gfortran cmake libomp-dev
+git clone https://github.com/ZJU-FAST-Lab/Implicit-SDF-Planner.git
+cd Implicit-SDF-Planner
+./build.sh
+source devel/setup.bash #(If use bash)
+source devel/setup.zsh  #(If use zsh) 
+roslaunch ego_planner demox.launch #(x=1,2,3...)
+```
