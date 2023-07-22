@@ -225,15 +225,12 @@ void map3Gene()
     geneWall(10.0, 0.0, 13.0, 2.0, 50.0, 5.0);
     geneWall(20.0, 0.0, 13.0, 2.0, 50.0, 5.0);
 }
-//test//
+
 void map10Gene()
 {
     geneWall(0,0, 0.2, 0.2, 3.0);
     geneWall(50,50, 15.0 , 0.2, 0.2, 3.0);
 
-
-    // geneWall(10.0, 0.0, 2.0, 50.0, 15.0);
-    // geneWall(20.0, 0.0, 2.0, 50.0, 15.0);
 
 
 
@@ -241,14 +238,10 @@ void map10Gene()
     geneWall(25.0, 0.0, 2.0, 50.0, 35.0);
     geneWall(40.0, 0.0, 2.0, 50.0, 35.0);
 
-    geneWall(10.0, 49.0, 30.0, 1.0, 35.0);//封住墙体
+    geneWall(10.0, 49.0, 30.0, 1.0, 35.0);
                                          
-    geneWall(0.0, 0.0, -1.0,50.0, 50.0, 1.0); //封住地下
-// geneWall(10.0, 0.0, 2.0, 55.0, 35.0);
+    geneWall(0.0, 0.0, -1.0,50.0, 50.0, 1.0); 
 
-
-    // geneWall(10.0, 0.0, 13.0, 2.0, 50.0, 5.0);
-    // geneWall(20.0, 0.0, 13.0, 2.0, 50.0, 5.0);
 }
 
 
@@ -262,7 +255,7 @@ void map4Gene()
     geneWall(0,0, 0.2, 0.2, 3.0);
     geneWall(60,60, 35.0 , 0.2, 0.2, 3.0);
 
-    double num = 450;
+    double num = 250;
     srand(time(NULL));
     pcl::PointXYZ s_point;
     for(int i = 0 ; i < num; i++)
@@ -293,7 +286,7 @@ void map11Gene()
     geneWall(0,0, 0.2, 0.2, 3.0);
     geneWall(60,60, 35.0 , 0.2, 0.2, 3.0);
 
-    double num = 600;
+    double num = 300;
     srand(time(NULL));
     pcl::PointXYZ s_point;
     for(int i = 0 ; i < num; i++)
@@ -470,7 +463,7 @@ int main (int argc, char** argv)
 
     ros::Duration(2).sleep();
 
-    int t = 5;
+    int t = 3;
 
     while(t--)
     {   

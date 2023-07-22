@@ -19,7 +19,7 @@
     
      <node pkg="plan_manager" type="plan_manager" name="plan_manager_lmbm" output="screen"> 
         <param name="use_lbfgs" value="false" />
-        <rosparam file="$(find plan_manager)/config/config(SmoothIntersection(yaw20,pitch50,roll0)).yaml" command="load" />
+        <rosparam file="$(find plan_manager)/config/config_SmoothIntersection.yaml" command="load" />
     </node>
 
      <!-- <node pkg="plan_manager" type="plan_manager" name="plan_manager_lbfgs" output="screen"> 
@@ -64,7 +64,7 @@
 	<include file="$(find map_manager)/launch/globalmap_gene.launch">
 		<arg name="map_id" value="4" />
         <arg name="read_from_pcd" value="true" />
-        <arg name="pcd_file_name" value="SmoothIntersection(20,50,0).pcd" />
+        <arg name="pcd_file_name" value="SmoothIntersection.pcd" />
 	</include>
 
 </launch>

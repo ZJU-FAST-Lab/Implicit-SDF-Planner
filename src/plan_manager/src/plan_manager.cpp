@@ -521,7 +521,7 @@ void PlannerManager::generateTraj(const vector<Vector3d> &path)
       planner_manager->minco_traj_optimizer->pause = msg->data[1];
     }
 
-    // 渲染0状态kernel
+    
     if (msg->data[0] == 101)
     {
       Config conf = planner_manager->config;
@@ -553,7 +553,7 @@ void PlannerManager::generateTraj(const vector<Vector3d> &path)
       }
       planner_manager->visulizer->visPointcloudByVector(kernel, "zero_kernel_vis");
     }
-    // 可视化扫略体积
+    
     if (msg->data[0] == 102)
     {
       if (planner_manager->recent_path.size() == 0)
@@ -567,7 +567,7 @@ void PlannerManager::generateTraj(const vector<Vector3d> &path)
       planner_manager->sv_manager->calculateSwept(U_, G_);
       return;
     }
-    // reshow
+  
     if (msg->data[0] == 103)
     {
       if (planner_manager->recent_path.size() == 0)
@@ -580,92 +580,8 @@ void PlannerManager::generateTraj(const vector<Vector3d> &path)
       return;
     }
 
-    // 渲染map kernel
-    if (msg->data[0] == 104)
-    {
-
-      Config conf = planner_manager->config;
-      vector<Vector3d> kernel;
-      int side_size = (conf.kernel_size - 1) / 2;
-      int X_size = planner_manager->pcsmap_manager->occupancy_map->X_size + 2 * side_size;
-      int Y_size = planner_manager->pcsmap_manager->occupancy_map->Y_size + 2 * side_size;
-      int Z_size = planner_manager->pcsmap_manager->occupancy_map->Z_size + 2 * side_size;
-      int len_of_last_dim = (Z_size + 7) / 8;
-
-      double res = conf.occupancy_resolution;
-      Vector3d ofsb = Vector3d::Ones() * side_size;
-
-      kernel.clear();
-
-      for (size_t x = 0; x < X_size; x++)
-      {
-        for (size_t y = 0; y < Y_size; y++)
-        {
-          for (size_t z = 0; z < Z_size; z++)
-          {
-            int byteIDx = x * Y_size * len_of_last_dim + y * len_of_last_dim + (z) / 8;
-            int offset = z % 8;
-            if (planner_manager->sv_manager->map_kernel[byteIDx] & bit_sel[offset])
-            {
-              std::cout << byteIDx << std::endl;
-              kernel.push_back((Vector3d(x, y, z) - ofsb) * res);
-            }
-          }
-        }
-      }
-      planner_manager->visulizer->visPointcloudByVector(kernel, "zero_kernel_vis");
-    }
-    // 重新绘制SE3path
-    if (msg->data[0] == 105)
-    {
-      if (planner_manager->recent_path.size() == 0)
-      {
-        std::cout << "Error no trajectory now" << std::endl;
-        return;
-      }
-      planner_manager->visulizer->visSE3Path("SE3path", planner_manager->sv_manager->getRobotShapeMesh(), planner_manager->recent_se3_path);
-    }
-
-    // 从轨迹生成地图
-    if (msg->data[0] == 113)
-    {
-
-      std_msgs::Int8MultiArray clear_map;
-      clear_map.data.push_back(CLEAR_MAP);
-      clear_map.data.push_back(2);
-      planner_manager->settingRcvCallBack(clear_map);
-
-      planner_manager->global_map_pcl_cloud.clear();
-
-      planner_manager->geneWall(0, 0, 0.2, 0.2, 3.0, planner_manager->global_map_pcl_cloud);
-      planner_manager->geneWall(50, 50, 32.0, 0.2, 0.2, 3.0, planner_manager->global_map_pcl_cloud);
-      //===================================================================================================
-      double x = (int)msg->data[3];
-      double y = (int)msg->data[2];
-      double z = (int)msg->data[1];
-      double tor = msg->data[4]; // 控制空洞的safe horizon
-
-      std::cout << "=========x===========:" << x << std::endl;
-      std::cout << "=========y===========:" << y << std::endl;
-      std::cout << "=========z===========:" << z << std::endl;
-      planner_manager->geneWall(x, 0.0, 2.0, 50.0, 35.0, planner_manager->global_map_pcl_cloud, tor);
-      planner_manager->geneWall(y, 0.0, 2.0, 50.0, 35.0, planner_manager->global_map_pcl_cloud, tor);
-      planner_manager->geneWall(z, 0.0, 2.0, 50.0, 35.0, planner_manager->global_map_pcl_cloud, tor);
-      //     // planner_manager->geneWall(10.0, 0.0, 2.0, 50.0, 35.0, planner_manager->global_map_pcl_cloud);
-      //     // planner_manager->geneWall(25.0, 0.0, 2.0, 50.0, 35.0, planner_manager->global_map_pcl_cloud);
-      //     // planner_manager->geneWall(40.0, 0.0, 2.0, 50.0, 35.0, planner_manager->global_map_pcl_cloud);
-
-      // //======================================================后期这部分不可视化======================================================
-      planner_manager->geneWall(0.0, 49.0, 50.0, 1.0, 35.0, planner_manager->global_map_pcl_cloud, tor);      // 墙封住，避免前段取巧
-      planner_manager->geneWall(0.0, 0.0, 34.0, 50.0, 50.0, 1.0, planner_manager->global_map_pcl_cloud, tor); // 封住天花板,避免前段取巧
-
-      // 这里有double free的bug===============================
-      //  planner_manager->geneWall(0.0, 0.0, -1.0,50.0, 50.0, 1.0,planner_manager->global_map_pcl_cloud); //封住地下,避免前段取巧
-
-      sensor_msgs::PointCloud2 global_map_cloud;
-      pcl::toROSMsg(planner_manager->global_map_pcl_cloud, global_map_cloud);
-      planner_manager->pcsmap_manager->rcvGlobalMapHandler(global_map_cloud);
-    }
+  
+   
   }
 
   void DebugAssistant::init(ros::NodeHandle & nh, PlannerManager::Ptr pm)

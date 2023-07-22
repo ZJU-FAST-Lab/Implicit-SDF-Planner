@@ -1,10 +1,14 @@
 # Implicit-SDF-Planner
 
-## Continuous Implicit SDF Based Any-shape Robot Trajectory Optimization
 
-Our paper is accepted at IROS2023, and we will release some of our code around the end of July.
+**Related Paper**: 
 
-Preprint: [arxiv](https://arxiv.org/abs/2303.01330)
+Please cite the paper below if this repo helps you.
+
+- [Continuous Implicit SDF Based Any-shape Robot Trajectory Optimization](https://arxiv.org/abs/2303.01330), Tingrui Zhang*, Jingping Wang*,Chao Xu, Alan Gao, Fei Gao.
+- Our paper is accepted at IROS2023, and we will release some of our code around the end of July.
+
+
 
 * [Video on Youtube](https://www.youtube.com/watch?v=Sb6HaVMZWak&ab_channel=FeiGao) or [Video on Bilibili](https://www.bilibili.com/video/BV1Rg4y1E79w/?spm_id_from=333.999.0.0)
 
@@ -79,8 +83,8 @@ source devel/setup.zsh  #(If use zsh)
 roslaunch ego_planner demox.launch #(x=1,2,3...)
 ```
 
-- Then use "2D Nav Goal" in rviz to publish the goal for  navigation.
-
+- Then use "3D Nav Goal" in rviz to publish the goal for  navigation.
+**Note that the start and end points of the clicks must be within the map.**
 ## More Examples (Some-shaped robots with uav dynamics)
 
 ### 2D version and shape variant demos will be released later...
@@ -88,6 +92,8 @@ roslaunch ego_planner demox.launch #(x=1,2,3...)
 ### 3D version demos
 
 Have a cool example? Submit a PR! You can either extend the robot's shape arbitrarily via an obj file in [shapes](src/plan_manager/shapes).The code will automatically use libigl to get its SDF. Or you can inherit from Generalshape in [Shape.hpp](src/utils/include/utils/Shape.hpp) to implement the desired shape and the associated SDF methods.For visualization purpose, you will also need a corresponding obj file for robot shape. 
+
+
 
 <div style="display: flex; justify-content: center;">
   <table>
@@ -133,4 +139,4 @@ The source code is released under [GPLv3](http://www.gnu.org/licenses/) license.
 ## Maintaince
 
 For any technical issue or bug, please contact Tingrui Zhang (tingruizhang@zju.edu.cn) or Jingping Wang (22232111@zju.edu.cn).
-For commercial inquiries, please contact [Fei GAO](https://ustfei.com/) (fgaoaa@zju.edu.cn).
+For commercial inquiries, please contact [Fei GAO](http://zju-fast.com/fei-gao/) (fgaoaa@zju.edu.cn).

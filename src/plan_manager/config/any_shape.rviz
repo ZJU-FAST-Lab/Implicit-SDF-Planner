@@ -268,7 +268,7 @@ Visualization Manager:
       Marker Topic: /interior
       Name: interior
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -481,7 +481,7 @@ Visualization Manager:
       Marker Topic: /front_end_path
       Name: Path
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -489,7 +489,7 @@ Visualization Manager:
       Marker Topic: /traj
       Name: Traj_mico
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -505,7 +505,7 @@ Visualization Manager:
       Marker Topic: /step_traj
       Name: step_traj
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -565,7 +565,7 @@ Visualization Manager:
       Marker Topic: /SE3path
       Name: SE3Path
       Namespaces:
-        mesh: true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -661,7 +661,7 @@ Visualization Manager:
       Marker Topic: /ori_traj/debug_traj
       Name: mid_traj_step
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -741,7 +741,7 @@ Visualization Manager:
       Marker Topic: /SDFvisPoints
       Name: SDFvisPoints
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -790,7 +790,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 34.09750747680664
+      Distance: 53.65309143066406
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -806,9 +806,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5252022743225098
+      Pitch: 0.3752024471759796
       Target Frame: <Fixed Frame>
-      Yaw: 4.226784706115723
+      Yaw: 4.48678731918335
     Saved: ~
 Window Geometry:
   Displays:

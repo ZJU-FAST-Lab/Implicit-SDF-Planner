@@ -32,12 +32,10 @@ void GridMap3D::createGridMap(const Vector3d &boundary_xyzmin, const Vector3d &b
 
 
     totalsize = X_size * Y_size * Z_size;
-    grid_map = new double[totalsize](); // 初始化全为0
+    grid_map = new double[totalsize](); 
     grid_map_buffer_neg = new double[totalsize]();
     grid_map_buffer_all = new double[totalsize]();
     grid_map_flags = new bool[totalsize]();
-
-    // clearGridMap();
 }
 
 bool GridMap3D::isInMap(const Vector3d &pos_w)const
@@ -138,16 +136,6 @@ Vector3i GridMap3D::getGridIndex(const Vector3d &pos_w)
 {
     if (!isInMap(pos_w))
     {
-        // if (debug_output)
-        // {
-        //     cout << pos_w << endl;
-        //     ROS_WARN("[getGridIndex()] this point is out of map!");
-        //     cout << (pos_w(0) <= boundary_xyzmin(0)) << "\t" << (pos_w(1) <= boundary_xyzmin(1)) << "\t"
-        //          << (pos_w(2) <= boundary_xyzmin(2)) << "\t" << (pos_w(0) >= boundary_xyzmax(0)) << "\t"
-        //          << (pos_w(1) >= boundary_xyzmax(1)) << "\t" << (pos_w(2) >= boundary_xyzmax(2)) << "\n";
-        //     cout << "boundary is " << boundary_xyzmax << endl
-        //          << endl;
-        // }
         return Vector3i(0, 0, 0);
     }
 
