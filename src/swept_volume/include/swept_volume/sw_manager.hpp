@@ -15,7 +15,7 @@
 #include <functional>
 
 #define TRAJ_ORDER 5
-#define useScale false 
+
 
 
 using namespace shape;
@@ -181,15 +181,14 @@ public:
             Eigen::Matrix3d VRt, Rt;
             Eigen::Vector3d xt, vt;
             Eigen::RowVector3d pos, point_velocity, normal;
-            Eigen::Matrix3d St, dSt; 
             Eigen::RowVector3d candidate;
             for (double t = t_min; t <= t_max; t = t + 0.1)
             {
-                getStateOnTrajStamp(t, xt, vt, Rt, VRt, St, dSt);
-                pos = (St * Rt * P.transpose()).transpose() + xt.transpose();                                                      // 原始的采样点在时间t时刻新的位置
-                point_velocity = (St * VRt * P.transpose()).transpose() + vt.transpose() + (dSt * Rt * P.transpose()).transpose(); // 原始的采样点在时间t时刻新的速度
+                getStateOnTrajStamp(t, xt, vt, Rt, VRt);
+                pos = (Rt * P.transpose()).transpose() + xt.transpose();                                                  
+                point_velocity = (VRt * P.transpose()).transpose() + vt.transpose(); 
                 point_velocity.normalize();
-                normal = (St * Rt * N.row(I(i)).transpose()).transpose();
+                normal = (Rt * N.row(I(i)).transpose()).transpose();
                 normal.normalize();
                 if ((fabs(normal.dot(point_velocity)) < 0.05) || (normal.dot(point_velocity) < 0.0 && t == t_min) || (normal.dot(point_velocity) > 0.0 && t == t_max))
                 {
@@ -296,32 +295,7 @@ public:
         }
     }
 
-    /**
-     * 获得轨迹上具体某一时刻的状态
-     * @param time_stamp 时刻
-     * @param xt 引用格式，获得time_stamp时刻的位置
-     * @param vt 引用格式，获得time_stamp时刻的速度
-     * @param Rt 引用格式，获得time_stamp时刻的姿态
-     * @param VRt 引用格式，获得time_stamp时刻的姿态变化
-     */
-    inline void getStateOnTrajStamp(const double &time_stamp,
-                                    Eigen::Vector3d &xt,
-                                    Eigen::Vector3d &vt,
-                                    Eigen::Matrix3d &Rt,
-                                    Eigen::Matrix3d &VRt)
-    {
-        Eigen::Vector3d at,jt;
-        traj.getPos_Vel_Acc_Jerk(time_stamp,xt,vt,at,jt);
-        Eigen::Vector4d quat;
-        Eigen::Vector3d omg;
-        flatness.optimizated_forward(vt, at, jt, quat, omg);
-        Rt = Eigen::Quaterniond(quat[0], quat[1], quat[2], quat[3]).toRotationMatrix();
-        Eigen::Matrix3d w_hat;
-        w_hat << 0, -omg(2), omg(1),
-            omg(2), 0, -omg(0),
-            -omg(1), omg(0), 0;
-        VRt = Rt * w_hat;
-    }
+
     /**
      * 获得轨迹上具体某一时刻的状态
      * @param time_stamp 时刻
@@ -329,16 +303,12 @@ public:
      * @param vt 引用格式，获得time_stamp时刻的速度
      * @param Rt 引用格式，获得time_stamp时刻的姿态
      * @param VRt 引用格式，获得time_stamp时刻的姿态变化导函数
-     * @param St 引用格式,获得time_stamp时刻三轴缩放比例
-     * @param dSt 引用格式,获得time_stamp时刻三轴缩放变化导函数
      */
     inline void getStateOnTrajStamp(const double &time_stamp,
                                     Eigen::Vector3d &xt,
                                     Eigen::Vector3d &vt,
                                     Eigen::Matrix3d &Rt,
-                                    Eigen::Matrix3d &VRt,
-                                    Eigen::Matrix3d &St,
-                                    Eigen::Matrix3d &dSt)
+                                    Eigen::Matrix3d &VRt)
     {
         Eigen::Vector3d at,jt;
         traj.getPos_Vel_Acc_Jerk(time_stamp,xt,vt,at,jt);
@@ -351,8 +321,6 @@ public:
             omg(2), 0, -omg(0),
             -omg(1), omg(0), 0;
         VRt = Rt * w_hat;
-        St = getScale(time_stamp);
-        dSt = getDotScale(time_stamp);
     }
 
     /**
@@ -371,49 +339,8 @@ public:
         flatness.optimizated_forward(vt, at, jt, quat);
         Rt = Eigen::Quaterniond(quat[0], quat[1], quat[2], quat[3]).toRotationMatrix();
     }
-    /**
-     * 获得轨迹上具体某一时刻的状态
-     * @param time_stamp 时刻
-     * @param xt 引用格式，获得time_stamp时刻的位置
-     * @param Rt 引用格式，获得time_stamp时刻的姿态
-     * @param St 引用格式，获得time_stamp时刻的形变
-     */
-    inline void getStateOnTrajStamp(const double &time_stamp,
-                                    Eigen::Vector3d &xt,
-                                    Eigen::Matrix3d &Rt,
-                                    Eigen::Matrix3d &St)
-    {
-        Eigen::Vector3d vt,at,jt;
-        traj.getPos_Vel_Acc_Jerk(time_stamp,xt,vt,at,jt);
-        Eigen::Vector4d quat; 
-        flatness.optimizated_forward(vt, at, jt, quat);
-        Rt = Eigen::Quaterniond(quat[0], quat[1], quat[2], quat[3]).toRotationMatrix();
-        St = getScale(time_stamp);
-    }
 
-    /**
-     * 获得轨迹上具体某一时刻的机器人尺寸因子
-     * @param time_stamp 时刻
-     * @return time_stamp 时刻机器人尺寸因子
-     * @attention 当前返回单位矩阵，需要按需修改,注意奇异点问题Scale缩放分母除以0，求inverse问题
-     */
-    inline Eigen::Matrix3d getScale(const double t)
-    {
-        return Eigen::Matrix3d::Identity();
-    }
 
-    /**
-     * 获得轨迹上具体某一时刻的机器人尺寸因子变化导数
-     * @param time_stamp 时刻
-     * @return time_stamp 时刻机器人尺寸因子
-     * @attention 当前返回0矩阵，需要按需修改
-     */
-    inline Eigen::Matrix3d getDotScale(const double t) // 得到三轴缩放
-    {
-        Eigen::Matrix3d St;
-        St = Matrix3d::Zero();
-        return St;//原先这里出shit。导致优化后死循环？
-    }
 
     /**
      * pos_eva 转为 pos_rel
@@ -429,23 +356,6 @@ public:
     {
         return (Rt.transpose() * (pos_eva - xt));
     }
-    /**
-     * pos_eva 转为 pos_rel
-     * @param pos_eva 世界系坐标
-     * @param xt 机器人所在的位置
-     * @param Rt 机器人的姿态
-     * @param St 机器人的缩放因子
-     * @return 机器人系下的坐标
-     * @attention 带St的重载版本考虑优化inverse()计算
-     */
-    inline Eigen::Vector3d posEva2Rel(const Eigen::Vector3d &pos_eva,
-                                      const Eigen::Vector3d &xt,
-                                      const Eigen::Matrix3d &Rt,
-                                      const Eigen::Matrix3d &St)
-    {
-        return (Rt.transpose() * St.inverse() * (pos_eva - xt));
-    }
-
   
        /**
      * 初次选取时间种子的策略
@@ -453,9 +363,7 @@ public:
      * @param pos_eva 世界系下需要查询的点
      * @param dt 筛选种子点的分辨率
      * @return 找到的时间种子
-     * @attention 注意手动制定模板元withscale是否考虑形状
      */
-    template <bool withscale = false>
     inline double choiceTInit(const Eigen::Vector3d &pos_eva, const double dt, vector<double>& range_l, vector<double>& range_r,  vector<double>& range_ts)
     {
         double rough_dt = 0.2;
@@ -480,8 +388,7 @@ public:
 
         Eigen::Vector3d xt, vt;
         Eigen::Matrix3d Rt;
-        if (!withscale)
-        {
+    
             for(double t = 0; t < traj_duration; t += rough_dt)
             {
                 getStateOnTrajStamp(t, xt, Rt);
@@ -532,59 +439,9 @@ public:
 
 
             return time_seed;
-        }
+        
 
-        else
-        {
-            Eigen::Matrix3d St;
-            for (double t = 0; t < traj_duration; t += dt) 
-            {
-                getStateOnTrajStamp(t, xt, Rt, St);
-                dis = current_robot_shape->getonlySDF(posEva2Rel(pos_eva, xt, Rt, St));
-                if (dis < mindis)
-                {
-                    time_seed = t;
-                    mindis = dis;
-                }
 
-                if(dis < safty_hor_inf){
-                    if(flag_in_range == false){
-                        flag_in_range = true;
-                        tou_lb = std::max(0.0, t - rough_dt);
-                        tou_ub = t;
-                    }
-                    else{
-                        tou_ub = std::min(traj_duration, t + rough_dt);
-                    }
-                }
-                else{
-                    if(flag_in_range == true){
-                        flag_in_range = false;
-                        tou_ub = std::min(traj_duration, t + rough_dt);
-                        range_l.push_back(tou_lb);
-                        range_r.push_back(tou_ub);
-                    }
-                }
-            }
-
-            int N = range_l.size();
-            for(size_t i = 0 ; i < N ; i++) {
-                tou_lb = range_l[i];
-                tou_ub = range_r[i];
-                for(double t = tou_lb; t < tou_ub; t += dt)
-                {
-                    getStateOnTrajStamp(t, xt, Rt, St);
-                    dis = current_robot_shape->getonlySDF(posEva2Rel(pos_eva, xt, Rt, St));
-                    if (dis < range_mindis)
-                    {
-                        range_time_seed = t;
-                        range_mindis = dis;
-                    }
-                }
-                range_ts.push_back( range_time_seed );
-            }
-            return time_seed;
-        }
     }
 
 
@@ -595,9 +452,8 @@ public:
      * @param pos_eva 世界系下需要查询的点
      * @param dt 筛选种子点的分辨率
      * @return 找到的时间种子
-     * @attention 注意手动制定模板元withscale是否考虑形状
      */
-    template <bool withscale = false>
+
     inline double choiceTInit(const Eigen::Vector3d &pos_eva, const double dt)
     {
         double rough_dt = 0.15;
@@ -622,9 +478,7 @@ public:
 
         Eigen::Vector3d xt, vt;
         Eigen::Matrix3d Rt;
-        if (!withscale)
-        {
-            for(double t = 0; t < traj_duration; t += rough_dt)
+        for(double t = 0; t < traj_duration; t += rough_dt)
             {
                 getStateOnTrajStamp(t, xt, Rt);
                 dis = current_robot_shape->getonlySDF(posEva2Rel(pos_eva, xt, Rt));
@@ -671,71 +525,11 @@ public:
             }
 
             return time_seed;
-        }
-        else
-        {
-            Eigen::Matrix3d St;
-            for (double t = 0; t < traj_duration; t += dt) 
-            {
-                getStateOnTrajStamp(t, xt, Rt, St);
-                dis = current_robot_shape->getonlySDF(posEva2Rel(pos_eva, xt, Rt, St));
-                if (dis < mindis)
-                {
-                    time_seed = t;
-                    mindis = dis;
-                }
-                if(dis < safty_hor_inf){
-                    if(flag_in_range == false){
-                        flag_in_range = true;
-                        tou_lb = std::max(0.0, t - rough_dt);
-                        tou_ub = t;
-                    }
-                    else{
-                        tou_ub = std::min(traj_duration, t + rough_dt);
-                    }
-                }
-                else{
-                    if(flag_in_range == true){
-                        flag_in_range = false;
-                        tou_ub = std::min(traj_duration, t + rough_dt);
-                        range_l.push_back(tou_lb);
-                        range_r.push_back(tou_ub);
-                    }
-                }
-            }
-
-            int N = range_l.size();
-            for(size_t i = 0 ; i < N ; i++) {
-                tou_lb = range_l[i];
-                tou_ub = range_r[i];
-                for(double t = tou_lb; t < tou_ub; t += dt)
-                {
-                    getStateOnTrajStamp(t, xt, Rt,St);
-                    dis = current_robot_shape->getonlySDF(posEva2Rel(pos_eva, xt, Rt,St));
-                    if (dis < mindis)
-                    {
-                        time_seed = t;
-                        mindis = dis;
-                    }
-                }
-            }
-
-            return time_seed;
-        }
+        
+        
     }
 
    
-
-    /**
-     * 得到机器人运动到xt状态，姿态和缩放为Rt和St时，在pos_eva处的SDF和grad_prel
-     * @return SDF值
-     */
-    inline double getSDFWithGradWhenRobotAtState(const Eigen::Vector3d &pos_eva, Eigen::Vector3d &grad_prel, const Eigen::Vector3d &xt,
-                                                 const Eigen::Matrix3d &Rt, const Eigen::Matrix3d &St)
-    {
-        return current_robot_shape->getSDFwithGrad1(posEva2Rel(pos_eva, xt, Rt, St), grad_prel);
-    }
-
     /**
      * 得到机器人运动到xt状态，姿态和缩放为Rt时，在pos_eva处的SDF和grad_prel
      * @return SDF值
@@ -746,27 +540,6 @@ public:
         return current_robot_shape->getSDFwithGrad1(posEva2Rel(pos_eva, xt, Rt), grad_prel);
     }
 
-    /**
-     * 得到机器人运动到xt状态，姿态和缩放为Rt和St时，在pos_eva处的SDF和grad_prel
-     * 使用数值方法计算的版本
-     * @return SDF值
-     */
-    inline double getSDFWithGradWhenRobotAtStateNum(const Eigen::Vector3d &pos_eva, Eigen::Vector3d &grad_prel, const Eigen::Vector3d &xt,
-                                                    const Eigen::Matrix3d &Rt, const Eigen::Matrix3d &St)
-    {
-        return current_robot_shape->getSDFwithGrad1Num(posEva2Rel(pos_eva, xt, Rt, St), grad_prel);
-    }
-
-    /**
-     * 得到机器人运动到xt状态，姿态和缩放为Rt时，在pos_eva处的SDF和grad_prel
-     * 使用数值方法计算的版本
-     * @return SDF值
-     */
-    inline double getSDFWithGradWhenRobotAtStateNum(const Eigen::Vector3d &pos_eva, Eigen::Vector3d &grad_prel, const Eigen::Vector3d &xt,
-                                                    const Eigen::Matrix3d &Rt)
-    {
-        return current_robot_shape->getSDFwithGrad1Num(posEva2Rel(pos_eva, xt, Rt), grad_prel);
-    }
 
     /**
      * 解析方法得到机器人运动到t时刻时，在pos_eva处的SDF
@@ -774,47 +547,15 @@ public:
      * @param time_stamp 时刻t
      * @return 机器人运动到t时刻时，在pos_eva处的SDF
      */
-    template <bool withscale = false>
     inline double getSDFAtTimeStamp(const Eigen::Vector3d &pos_eva, const double &time_stamp)
     {
         Eigen::Vector3d xt;
         Eigen::Matrix3d Rt;
-        if (!withscale)
-        {
-            getStateOnTrajStamp(time_stamp, xt, Rt);
-            return current_robot_shape->getonlySDF(posEva2Rel(pos_eva, xt, Rt));
-        }
-        else
-        {
-            Eigen::Matrix3d St;
-            getStateOnTrajStamp(time_stamp, xt, Rt, St);
-            return current_robot_shape->getonlySDF(posEva2Rel(pos_eva, xt, Rt, St));
-        }
+        getStateOnTrajStamp(time_stamp, xt, Rt);
+        return current_robot_shape->getonlySDF(posEva2Rel(pos_eva, xt, Rt));
     }
 
-    /**
-     * 数值方法得到机器人运动到t时刻时，在pos_eva处的SDF
-     * @param pos_eva 世界系下需要查询的点
-     * @param time_stamp 时刻t
-     * @return 机器人运动到t时刻时，在pos_eva处的SDF
-     */
-    template <bool withscale = false>
-    inline double getSDFNumAtTimeStamp(const Eigen::Vector3d &pos_eva, const double &time_stamp)
-    {
-        Eigen::Vector3d xt;
-        Eigen::Matrix3d Rt;
-        if (!withscale)
-        {
-            getStateOnTrajStamp(time_stamp, xt, Rt);
-            return current_robot_shape->getonlySDFNum(posEva2Rel(pos_eva, xt, Rt));
-        }
-        else
-        {
-            Eigen::Matrix3d St;
-            getStateOnTrajStamp(time_stamp, xt, Rt, St);
-            return current_robot_shape->getonlySDFNum(posEva2Rel(pos_eva, xt, Rt, St));
-        }
-    }
+
 
     /**
      * 解析方法得到机器人运动到t时刻时，在pos_eva处的GradPrel
@@ -822,74 +563,37 @@ public:
      * @param time_stamp 时刻t
      * @return 机器人运动到t时刻时，在pos_eva处的GradPrel
      */
-    template <bool withscale = false>
     inline Eigen::Vector3d getGradPrelAtTimeStamp(const Eigen::Vector3d &pos_eva, const double &time_stamp)
     {
         Eigen::Vector3d xt;
         Eigen::Matrix3d Rt;
-        if (!withscale)
-        {
-            getStateOnTrajStamp(time_stamp, xt, Rt);
-            return current_robot_shape->getonlyGrad1(posEva2Rel(pos_eva, xt, Rt));
-        }
-        else
-        {
-            Eigen::Matrix3d St;
-            getStateOnTrajStamp(time_stamp, xt, Rt, St);
-            return current_robot_shape->getonlyGrad1(posEva2Rel(pos_eva, xt, Rt, St));
-        }
+        getStateOnTrajStamp(time_stamp, xt, Rt);
+        return current_robot_shape->getonlyGrad1(posEva2Rel(pos_eva, xt, Rt));
     }
 
-    /**
-     * 数值方法得到机器人运动到t时刻时，在pos_eva处的GradPrel
-     * @param pos_eva 世界系下需要查询的点
-     * @param time_stamp 时刻t
-     * @return 机器人运动到t时刻时，在pos_eva处的GradPrel
-     */
-    template <bool withscale = false>
-    inline Eigen::Vector3d getGradPrelNumAtTimeStamp(const Eigen::Vector3d &pos_eva, const double &time_stamp)
-    {
-        Eigen::Vector3d xt;
-        Eigen::Matrix3d Rt;
-        if (!withscale)
-        {
-            getStateOnTrajStamp(time_stamp, xt, Rt);
-            return current_robot_shape->getonlyGrad1Num(posEva2Rel(pos_eva, xt, Rt));
-        }
-        else
-        {
-            Eigen::Matrix3d St;
-            getStateOnTrajStamp(time_stamp, xt, Rt, St);
-            return current_robot_shape->getonlyGrad1Num(posEva2Rel(pos_eva, xt, Rt, St));
-        }
-    }
 
     /**
      * 解析方法得到机器人运动到t时刻时，在pos_eva处的SDF对于轨迹运动时间t的导数
-     * @param withscale 模板决定是否考率形变
      * @param pos_eva 世界系下需要查询的点
      * @param time_stamp 时刻t
      * @return 机器人运动到t时刻时，在pos_eva处的SDF对于轨迹运动时间t的导数
      */
-    template <bool withscale = false>
     inline double getSDF_DOTAtTimeStamp(const Eigen::Vector3d &pos_eva, const double &time_stamp/**,bool debug=false**/)
    {    
 
         double t1 = std::max(0.0 ,time_stamp - 0.000001);
         double t2 = std::min(traj_duration, time_stamp + 0.000001);
-        double sdf1 = getSDFAtTimeStamp<withscale>( pos_eva, t1);
-        double sdf2 = getSDFAtTimeStamp<withscale>( pos_eva, t2); 
+        double sdf1 = getSDFAtTimeStamp( pos_eva, t1);
+        double sdf2 = getSDFAtTimeStamp( pos_eva, t2); 
         return (sdf2 - sdf1) * 500000; 
     }
 
 
-    template <bool withscale = false>
+    
     inline double getSDF_DOTAtTimeStampOptimized(const Eigen::Vector3d &pos_eva, const double &time_stamp/**,bool debug=false**/)
     {
         Eigen::Vector3d xt, vt, at, jt;
-
         traj.getPos_Vel_Acc_Jerk(time_stamp, xt, vt, at, jt); 
-
         double v0 = vt(0);
         double v1 = vt(1);
         double v2 = vt(2);
@@ -951,58 +655,13 @@ public:
             omg(2), 0, -omg(0),
             -omg(1), omg(0), 0;
         Eigen::Matrix3d Rt_trans = Rt.transpose();
-        if (!withscale)
-        {
         Eigen::Vector3d temp = Rt_trans * (pos_eva - xt);
         Eigen::Vector3d sdf_grad1 = current_robot_shape->getonlyGrad1(temp);
         Eigen::Vector3d point_velocity = -(Rt_trans * vt + w_hat * temp);
         return sdf_grad1.dot(point_velocity);
-        }
-        else
-        {
-        Eigen::Matrix3d St = getScale(time_stamp);
-        Eigen::Vector3d temp = Rt_trans* St.inverse() * (pos_eva - xt) ;
-        Eigen::Vector3d sdf_grad1 = current_robot_shape->getonlyGrad1(temp);
-        Eigen::Matrix3d dSt = getDotScale(time_stamp);
-        Eigen::Vector3d point_velocity = -(Rt_trans * St.inverse() * vt + w_hat * temp + Rt_trans * St.inverse() * dSt * St.inverse() * (pos_eva - xt));
-        return sdf_grad1.dot(point_velocity);
-        }
-
     }
 
-    /**
-     * 数值方法得到机器人运动到t时刻时，在pos_eva处的SDF对于轨迹运动时间t的导数
-     * @param withscale 模板决定是否考率形变
-     * @param pos_eva 世界系下需要查询的点
-     * @param time_stamp 时刻t
-     * @return 机器人运动到t时刻时，在pos_eva处的SDF对于轨迹运动时间t的导数
-     */
-    template <bool withscale = false>
-    inline double getSDF_DOTNumAtTimeStamp(const Eigen::Vector3d &pos_eva, const double &time_stamp)
-    {
-        Eigen::Vector3d sdf_grad1;
-        Eigen::Vector3d point_velocity;
-        Eigen::Vector3d xt, vt;
-        Eigen::Matrix3d Rt, VRt, Rt_trans;//有shit原先
-        
-        if (!withscale)
-        {
-            getStateOnTrajStamp(time_stamp, xt, vt, Rt, VRt);
-            Rt_trans = Rt.transpose();
-            sdf_grad1 = current_robot_shape->getonlyGrad1Num(posEva2Rel(pos_eva, xt, Rt));
-            point_velocity = -(Rt_trans * vt + Rt_trans * VRt * Rt_trans * (pos_eva - xt));
-        }
-        else
-        {
-            Eigen::Matrix3d St, dSt;
-            getStateOnTrajStamp(time_stamp, xt, vt, Rt, VRt, St, dSt);
-            Rt_trans = Rt.transpose();
-            sdf_grad1 = current_robot_shape->getonlyGrad1Num(posEva2Rel(pos_eva, xt, Rt, St));
-            point_velocity = -(Rt_trans * St.inverse() * vt + Rt_trans * VRt * Rt_trans * St.inverse() * (pos_eva - xt) + Rt_trans * St.inverse() * dSt * St.inverse() * (pos_eva - xt));
-        } 
-
-        return sdf_grad1.dot(point_velocity);
-    }
+   
 
     /**
      * 解析方法得到扫略体积的SDF值
@@ -1024,14 +683,14 @@ public:
         double dtime = 0.0005;
         if (set_ts == false)
         {
-            ts = choiceTInit<useScale>(pos_eva, dtime); 
+            ts = choiceTInit(pos_eva, dtime); 
         }
         double tmin_ = std::max(0.0, ts - 3.4);           
         double tmax_ = std::min(ts + 3.4, traj_duration); 
         gradientDescent(momentum, tmin_, tmax_, ts, sdf_star, t_star, pos_eva);
         if (need_grad_prel)
         {
-            grad_prel = getGradPrelAtTimeStamp<useScale>(pos_eva, t_star);
+            grad_prel = getGradPrelAtTimeStamp(pos_eva, t_star);
         }
         time_seed_f = t_star;
         return sdf_star;
@@ -1064,7 +723,7 @@ public:
 
         if (set_ts == false)
         {
-            ts = choiceTInit<useScale>(pos_eva, dtime , range_l, range_r, range_ts);//在ts附近作梯度下降
+            ts = choiceTInit(pos_eva, dtime , range_l, range_r, range_ts);//在ts附近作梯度下降
         }
 
         int range_count = range_l.size();
@@ -1080,7 +739,7 @@ public:
                 time_seed_f = t_star;
                 if (need_grad_prel)
                 {
-                    grad_prel = getGradPrelAtTimeStamp<useScale>(pos_eva, t_star);
+                    grad_prel = getGradPrelAtTimeStamp(pos_eva, t_star);
                 }
             }
         }
@@ -1301,9 +960,7 @@ public:
         Eigen::Vector3d trans;
         if (delta > 0.0 && delta < traj.getTotalDuration())
         {
-            Eigen::Matrix3d St;
             trans = traj.getPos(delta);
-            St = getScale(delta);
             double thr;
             Eigen::Vector4d quat; 
             Eigen::Vector3d omg;
@@ -1323,7 +980,7 @@ public:
                 omg(2), 0, -omg(0),
                 -omg(1), omg(0), 0;
             Eigen::Matrix3d VRt = Rt * w_hat;
-            current_robot_shape->Transform(quat, trans, St);
+            current_robot_shape->Transform(quat, trans);
             vis->visPolytope(current_robot_shape->mesh_var, "Polymesh", "Polyedge", false,2);
             vis->visABall(current_robot_shape->interior_var, 0.1, "interior", vis::Color::blue);
         
@@ -1376,19 +1033,19 @@ public:
 
             if (iter == 0)
             {
-                fx = getSDFAtTimeStamp<useScale>(pos_eva, x);
+                fx = getSDFAtTimeStamp(pos_eva, x);
             }
-            g = getSDF_DOTAtTimeStampOptimized<useScale>(pos_eva, x);
+            g = getSDF_DOTAtTimeStampOptimized(pos_eva, x);
             tau = alpha;
             prev_x = x;
             for (int div = 1; div < 10; div++) 
             {
                 iter = iter + 1;
                 projection = x;
-                g = getSDF_DOTAtTimeStampOptimized<useScale>(pos_eva, projection);
+                g = getSDF_DOTAtTimeStampOptimized(pos_eva, projection);
                 x_candidate = x - tau * ((int)(g > 0) - (int)(g < 0));
                 x_candidate = std::max(std::min(x_candidate, t_max), t_min);
-                fx_candidate = getSDFAtTimeStamp<useScale>(pos_eva, x_candidate);
+                fx_candidate = getSDFAtTimeStamp(pos_eva, x_candidate);
                 if ((fx_candidate - fx) < 0) 
                 {
                     x = x_candidate;
@@ -1466,9 +1123,9 @@ public:
 
             if (iter == 0)
             {
-                fx = getSDFAtTimeStamp<useScale>(pos_eva, x);
+                fx = getSDFAtTimeStamp(pos_eva, x);
             }
-            g = getSDF_DOTAtTimeStampOptimized<useScale>(pos_eva, x);
+            g = getSDF_DOTAtTimeStampOptimized(pos_eva, x);
             tau = alpha;
             prev_x = x;
             for (int div = 1; div < 10; div++)
@@ -1476,11 +1133,11 @@ public:
                 iter = iter + 1;
                 assert(iter < max_iter && "不满足iter < max_iter");
                 projection = x + momentum * change;
-                g = getSDF_DOTAtTimeStampOptimized<useScale>(pos_eva, projection);
+                g = getSDF_DOTAtTimeStampOptimized(pos_eva, projection);
                 change = momentum * change - tau * ((double)(g > 0) - (g < 0));
                 x_candidate = x + change;
                 x_candidate = std::max(std::min(x_candidate, t_max), t_min);
-                fx_candidate = getSDFAtTimeStamp<useScale>(pos_eva, x_candidate);
+                fx_candidate = getSDFAtTimeStamp(pos_eva, x_candidate);
                 if ((fx_candidate - fx) < (0.5 * (x_candidate - x) * g)) 
                 {
                     x = x_candidate;

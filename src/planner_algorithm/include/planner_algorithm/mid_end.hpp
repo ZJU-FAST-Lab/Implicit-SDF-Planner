@@ -446,7 +446,7 @@ public:
         Eigen::Vector4d gradQuat, violaQuatPenaGrad;
         Eigen::Vector3d gradVel, gradAcc, gradPos, gradOmg, violaPosPenaGrad;
         Eigen::Vector3d gradVelTotal, gradAccTotal, gradPosTotal, gradJerTotal;
-        Eigen::Matrix3d rotate, St;
+        Eigen::Matrix3d rotate;
 
         // double gradPsiT, gradDPsiT;
 

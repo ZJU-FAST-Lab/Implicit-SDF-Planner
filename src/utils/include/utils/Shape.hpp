@@ -356,7 +356,7 @@ namespace shape
          * @param ndz z boundingbox 长
          * @param nres 分辨率
          * @param enablekernel 模板参数是否初始化自身kernelmap
-         * @param enableselfmap 模板参数是否初始化自身SDF地图，对于类似box这样继承了generalshape类有解析解的就不需要初始化自身地图了。除非debug模式查看以下
+         * @param enableselfmap 模板参数是否初始化自身SDF地图
          */
         template <bool enablekernel = false, bool enableselfmap = true>
         void initShape(const double ndx, const double ndy, const double ndz, const double nres = 0.1)
@@ -749,12 +749,11 @@ namespace shape
          * 变换
          * @param quat 旋转变换
          * @param trans 平移变换
-         * @param St 伸缩变换
          */
-        void inline Transform(const Eigen::Vector4d &quat, const Vector3d &trans, const Matrix3d &St)
+        void inline Transform(const Eigen::Vector4d &quat, const Vector3d &trans)
         {
             Eigen::Quaterniond q(quat[0], quat[1], quat[2], quat[3]);
-            Transform(q.toRotationMatrix(), trans, St);
+            Transform(q.toRotationMatrix(), trans);
         }
 
         /**
@@ -783,16 +782,15 @@ namespace shape
          * 变换
          * @param R 旋转变换
          * @param trans_ 平移变换
-         * @param St 伸缩变换
          */
-        void inline Transform(const Matrix3d &R, const Vector3d &trans_, const Matrix3d &St)
+        void inline Transform(const Matrix3d &R, const Vector3d &trans_)
         {
 
             trans = trans_;
             Rotate = R;
-            vertices_var = (St * R * vertices).colwise() + trans;
-            mesh_var = (St * R * mesh).colwise() + trans;
-            interior_var = (St * R * interior).colwise() + trans;
+            vertices_var = ( R * vertices).colwise() + trans;
+            mesh_var = (R * mesh).colwise() + trans;
+            interior_var = (R * interior).colwise() + trans;
             euler = Rotate.eulerAngles(2, 1, 0);
             roll = AngleAxisd(euler(2), Vector3d::UnitX());
             pitch = AngleAxisd(euler(1), Vector3d::UnitY());

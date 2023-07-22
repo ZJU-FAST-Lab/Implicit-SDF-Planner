@@ -490,7 +490,7 @@ public:
 
             obj.flatmap.optimizated_forward(vel, acc, jer, quat, omg);
             Eigen::Matrix3d rotate = Eigen::Quaterniond(quat[0], quat[1], quat[2], quat[3]).toRotationMatrix(); 
-            Eigen::Matrix3d St = obj.sv_manager->getScale(s1);                                                 
+                                                           
             double pena = 0.0;
             gradVel.setZero();
             gradAcc.setZero();
@@ -612,12 +612,12 @@ public:
 
             obj.flatmap.optimizated_forward(vel, acc, jer, quat);
             Eigen::Matrix3d rotate = Eigen::Quaterniond(quat[0], quat[1], quat[2], quat[3]).toRotationMatrix();
-            Eigen::Matrix3d St = obj.sv_manager->getScale(time_seed_f);
+
             double pena = 0.0;
             double violaPosPena = 0.0;
 
             if (obj.grad_cost_p_sw(pos_eva, pos, rotate, quat,
-                                   St, sdf_value, gradp_eva, gradp_rel,
+                                   sdf_value, gradp_eva, gradp_rel,
                                    violaPosPenaGrad, violaQuatPenaGrad, violaPosPena))
             {
                 gradPos += weightPos * violaPosPenaGrad;
@@ -765,7 +765,6 @@ public:
 
     bool inline grad_cost_p(const Eigen::Vector3d &pos,
                             const Eigen::Matrix3d &R,
-                            const Eigen::Matrix3d &St,
                             const Eigen::Vector4d &quat,
                             Eigen::Vector3d &gradp,
                             Eigen::Vector4d &grad_quat,
@@ -797,18 +796,18 @@ public:
             p_minus_x = pos_eva - pos;
             step_gradq.setZero();
 
-            p_rel = R.transpose() * St.inverse() * p_minus_x;                                    
+            p_rel = R.transpose() * p_minus_x;                                    
             if (abs(p_rel.x()) > bdx / 2 || abs(p_rel.y()) > bdy / 2 || abs(p_rel.z()) > bdz / 2) 
             {
                 continue; 
             }
          
-            sdf_value = sv_manager->getSDFWithGradWhenRobotAtState(pos_eva, gradp_rel, pos, R, St);
+            sdf_value = sv_manager->getSDFWithGradWhenRobotAtState(pos_eva, gradp_rel, pos, R);
           
             sdf_cost = 0;
           
             smoothedL1(turcation - sdf_value, smooth_fac, sdf_cost, grad_out); 
-            sdf_grad = -grad_out * (-(St.inverse()).transpose() * R * gradp_rel);
+            sdf_grad = grad_out  * R * gradp_rel;
             if (sdf_cost > 0)
             {
                 costp += sdf_cost;
@@ -829,7 +828,6 @@ public:
                                const Eigen::Vector3d &pos_obj, 
                                const Eigen::Matrix3d &rotate,
                                const Eigen::Vector4d &quat,
-                               const Eigen::Matrix3d &St,
                                const double sdf_value,
                                const Eigen::Vector3d &gradp_eva,
                                Eigen::Vector3d &gradp_rel,
@@ -851,7 +849,7 @@ public:
         double sdf_out_grad = 0.0;
 
         smoothedL1(safety_hor - sdf_value, 0.01, sdf_cost, sdf_out_grad);
-        sdf_grad = -sdf_out_grad * (-(St.inverse()).transpose() * rotate * gradp_rel);
+        sdf_grad = sdf_out_grad * rotate * gradp_rel;
         if (sdf_cost > 0)
         {
 
