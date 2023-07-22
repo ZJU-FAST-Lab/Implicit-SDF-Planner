@@ -91,10 +91,9 @@ roslaunch ego_planner demox.launch #(x=1,2,3...)
 
 ### 3D version demos
 
-**You can click buttons on the screen to visualize the swept volume, stop the optimization process early, etc. Note that these visualisations only take effect after the second click of the button.**
-<video width="1280" height="360" controls>
-    <source src="fig/demo.mp4" type="video/mp4">
-</video>
+**You can click buttons on the screen to visualize the swept volume, stop the optimization process early, etc. Note that these visualizations only take effect after the second click of the button.**
+
+https://github.com/ZJU-FAST-Lab/Implicit-SDF-Planner/assets/83890569/df19362b-2827-4d36-93a2-d9ce9261f44d
 
 
 Have a cool example? Submit a PR! You can either extend the robot's shape arbitrarily via an obj file in [shapes](src/plan_manager/shapes).The code will automatically use libigl to get its SDF. You can also inherit from Generalshape in [Shape.hpp](src/utils/include/utils/Shape.hpp) to implement the desired shape and the associated SDF methods.For visualization purposes, you will also need a corresponding obj file for the robot shape. 
