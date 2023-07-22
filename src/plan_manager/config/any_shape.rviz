@@ -217,14 +217,6 @@ Visualization Manager:
       Value: true
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /sweptedge
-      Name: sweptedge
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: true
-    - Class: rviz/Marker
-      Enabled: true
       Marker Topic: /originaledge
       Name: originaledge
       Namespaces:
@@ -240,14 +232,6 @@ Visualization Manager:
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
-      Enabled: false
-      Marker Topic: /swept_interior
-      Name: swept_interior
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
-    - Class: rviz/Marker
       Enabled: true
       Marker Topic: /norm_end
       Name: norm_end
@@ -256,50 +240,13 @@ Visualization Manager:
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
-      Enabled: false
-      Marker Topic: /sphere
-      Name: sphere
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
-    - Class: rviz/Marker
       Enabled: true
       Marker Topic: /interior
       Name: interior
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
-    - Class: rviz/Marker
-      Enabled: false
-      Marker Topic: /visualization/Grad
-      Name: ESDF_TEST
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
-    - Align Bottom: false
-      Background Alpha: 0.800000011920929
-      Background Color: 0; 0; 0
-      Class: jsk_rviz_plugin/OverlayText
-      Enabled: false
-      Foreground Alpha: 0.800000011920929
-      Foreground Color: 25; 255; 240
-      Invert Shadow: false
-      Name: ESDF
-      Overtake BG Color Properties: false
-      Overtake FG Color Properties: false
-      Overtake Position Properties: false
-      Topic: /esdf
-      Value: false
-      font: DejaVu Sans Mono
-      height: 128
-      left: 0
-      line width: 2
-      text size: 12
-      top: 0
-      width: 128
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -395,34 +342,6 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 8.5
-        Min Value: 0.5
-        Value: true
-      Axis: Z
-      Channel Name: y
-      Class: rviz/PointCloud2
-      Color: 164; 0; 0
-      Color Transformer: FlatColor
-      Decay Time: 0
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 255; 0; 0
-      Min Color: 0; 0; 0
-      Name: AABBpoints
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 1.7319999933242798
-      Style: Spheres
-      Topic: /aabbpoints
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: false
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
         Max Value: 3.5
         Min Value: 0.5
         Value: true
@@ -481,7 +400,7 @@ Visualization Manager:
       Marker Topic: /front_end_path
       Name: Path
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -489,23 +408,23 @@ Visualization Manager:
       Marker Topic: /traj
       Name: Traj_mico
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /traj_opt/debug_wp
       Name: debugWP
       Namespaces:
         {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /step_traj
       Name: step_traj
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -544,28 +463,12 @@ Visualization Manager:
         {}
       Queue Size: 100
       Value: true
-    - Class: rviz/MarkerArray
-      Enabled: false
-      Marker Topic: /traj_opt/debug_wplists
-      Name: debug_wplists_AABB
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
-    - Class: rviz/Marker
-      Enabled: false
-      Marker Topic: /Debugmesh
-      Name: debugmesh
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
     - Class: rviz/Marker
       Enabled: true
       Marker Topic: /SE3path
       Name: SE3Path
       Namespaces:
-        {}
+        mesh: true
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -575,50 +478,6 @@ Visualization Manager:
       Namespaces:
         {}
       Queue Size: 100
-      Value: false
-    - Class: rviz/Marker
-      Enabled: false
-      Marker Topic: /collide_pts
-      Name: collide_pts
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
-    - Class: rviz/Marker
-      Enabled: false
-      Marker Topic: /traj_opt/debug_vec
-      Name: debugVec
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/PointCloud2
-      Color: 255; 98; 98
-      Color Transformer: FlatColor
-      Decay Time: 0
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Min Color: 0; 0; 0
-      Name: TEST_obs
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.30000001192092896
-      Style: Spheres
-      Topic: /traj_opt/debug_test_map
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: true
       Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
@@ -661,7 +520,7 @@ Visualization Manager:
       Marker Topic: /ori_traj/debug_traj
       Name: mid_traj_step
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -721,22 +580,6 @@ Visualization Manager:
       Use rainbow: true
       Value: true
     - Class: rviz/Marker
-      Enabled: false
-      Marker Topic: /path_vec
-      Name: Path_vec
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
-    - Class: rviz/Marker
-      Enabled: false
-      Marker Topic: /selfbox
-      Name: selfmapbox
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
-    - Class: rviz/Marker
       Enabled: true
       Marker Topic: /SDFvisPoints
       Name: SDFvisPoints
@@ -744,22 +587,6 @@ Visualization Manager:
         {}
       Queue Size: 100
       Value: true
-    - Class: rviz/Marker
-      Enabled: false
-      Marker Topic: /SDFvisPointsneigbor
-      Name: SDFvisPointsneigbor
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
-    - Class: rviz/Marker
-      Enabled: false
-      Marker Topic: /AABBbox
-      Name: AABBbox
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: false
   Enabled: true
   Global Options:
     Background Color: 0; 0; 0
@@ -790,7 +617,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 53.65309143066406
+      Distance: 92.68998718261719
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -798,17 +625,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 16.273418426513672
-        Y: 10.008650779724121
-        Z: 15.144433975219727
+        X: 34.26963806152344
+        Y: 33.79600524902344
+        Z: 9.280888557434082
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3752024471759796
+      Pitch: 0.3302028775215149
       Target Frame: <Fixed Frame>
-      Yaw: 4.48678731918335
+      Yaw: 4.431777477264404
     Saved: ~
 Window Geometry:
   Displays:

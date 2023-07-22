@@ -1207,25 +1207,25 @@ namespace shape
             inline double getonlySDF(const Eigen::RowVector3d &pos_rel)
             {
                 Eigen::RowVector3d p = (pos_rel - trans) * Rotate; 
-                const Vector3d p0{Eigen::Vector3d(0, 0, -2)};      
-                const Vector3d p1{Eigen::Vector3d(0, 0, 2)};
-                const Vector3d v{Eigen::Vector3d(-2, 0, 0)};
+                const Vector3d p0{Eigen::Vector3d(0, 0, -1)};      
+                const Vector3d p1{Eigen::Vector3d(0, 0, 1)};
+                const Vector3d v{Eigen::Vector3d(-1, 0, 0)};
                 const Vector3d ab = p1 - p0;
                 double t = clip((p.transpose() - p0).dot(ab) / (ab.dot(ab)), 0, 1);
-                auto f = capsule(Eigen::Vector3d(0, 0, -3.6), Eigen::Vector3d(0, 0, 3.6), 0.45);
+                auto f = capsule(Eigen::Vector3d(0, 0, -3.2), Eigen::Vector3d(0, 0, 3.2), 0.45);
                 return f(in_out_quad(t) * v + p.transpose());
             }
    
             inline double getonlySDF(const Eigen::RowVector3d &pos, const Eigen::Matrix3d &R_obj)
             {
                 Eigen::RowVector3d p = (pos - trans) * Rotate * R_obj;
-                const Vector3d p0{Eigen::Vector3d(0, 0, -2)}; 
-                const Vector3d p1{Eigen::Vector3d(0, 0, 2)};
-                const Vector3d v{Eigen::Vector3d(-2, 0, 0)};
+                const Vector3d p0{Eigen::Vector3d(0, 0, -1)}; 
+                const Vector3d p1{Eigen::Vector3d(0, 0, 1)};
+                const Vector3d v{Eigen::Vector3d(-1, 0, 0)};
                 const Vector3d ab = p1 - p0;
                 // Eigen::RowVector3d p;
                 double t = clip((p.transpose() - p0).dot(ab) / (ab.dot(ab)), 0, 1);
-                auto f = capsule(Eigen::Vector3d(0, 0, -4), Eigen::Vector3d(0, 0, 4), 0.5);
+                auto f = capsule(Eigen::Vector3d(0, 0, -3.2), Eigen::Vector3d(0, 0, 3.2), 0.45);
                 return f(in_out_quad(t) * v + p.transpose());
             }
             DEFINE_USEFUL_FUNCTION()

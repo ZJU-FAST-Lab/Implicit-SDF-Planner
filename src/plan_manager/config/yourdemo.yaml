@@ -10,7 +10,7 @@ inputdata:                    "shapes/BendBox.obj"      #depends on your
 poly_params:                   [0.0,0.0, 0.0,   0,0,0]  
 
 
-selfmapresu:                0.05 #自身SDF地图的分辨率
+selfmapresu:                0.05 
 
 box_x:    3.0 #相应改变mybox.obj的长宽高
 box_y:    0.3 #相应改变mybox.obj的长宽高

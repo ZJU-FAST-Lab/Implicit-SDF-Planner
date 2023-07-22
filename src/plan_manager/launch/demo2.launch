@@ -19,7 +19,7 @@
     
      <node pkg="plan_manager" type="plan_manager" name="plan_manager_lmbm" output="screen"> 
         <param name="use_lbfgs" value="false" />
-        <rosparam file="$(find plan_manager)/config/config_CappedCone.yaml" command="load" />
+        <rosparam file="$(find plan_manager)/config/config_Bendlinear_big.yaml" command="load" />
     </node>
 
      <!-- <node pkg="plan_manager" type="plan_manager" name="plan_manager_lbfgs" output="screen"> 
@@ -64,7 +64,7 @@
 	<include file="$(find map_manager)/launch/globalmap_gene.launch">
 		<arg name="map_id" value="4" />
         <arg name="read_from_pcd" value="true" />
-        <arg name="pcd_file_name" value="CappedCone.pcd" />
+        <arg name="pcd_file_name" value="Bendlinear_big.pcd" />
 	</include>
 
 </launch>
