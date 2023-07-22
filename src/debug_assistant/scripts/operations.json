@@ -1,0 +1,16 @@
+{
+    "operations": [
+        {
+            "name": "Render ori kernel",
+            "id": 101
+        },
+        {
+            "name": "visualize swept volume",
+            "id": 102
+        },
+        {
+            "name": "replay trajectory",
+            "id": 103
+        }
+    ]
+}

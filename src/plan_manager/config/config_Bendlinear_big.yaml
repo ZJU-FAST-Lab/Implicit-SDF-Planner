@@ -1,0 +1,94 @@
+threads_num:                  30 
+
+meshTopic:                    '/polyve/mesh'
+edgeTopic:                    '/polyve/edge'
+vertexTopic:                  '/polyve/vert'
+
+pcdmapname:                   "BendLinear_big" 
+inputdata:                    "shapes/BendLinear_big.obj"                  
+                              #translation and rotation(yaw,pitch,roll)
+poly_params:                   [0,0,0,  0,0,0] 
+
+
+
+selfmapresu:                0.05 
+box_x:    3.0 #相应改变mybox.obj的长宽高
+box_y:    0.3 #相应改变mybox.obj的长宽高
+box_z:    0.3 #相应改变mybox.obj的长宽高
+
+enable_sweptvolume:         true
+uavwithobstacle:            true
+uavwithmap:                 true
+torlerance:                 0.005 
+momentum:                   0.0 
+
+eps:                            0.15
+
+transparency:                   1.0 
+
+
+
+use_objfile_as_body:            true
+
+testRate:                     100.0
+
+
+
+
+ts:                           2.0 #
+# ==================================dynamics=========================================
+vehicleMass:                0.61
+gravAcc:                    9.8
+horizDrag:                  0.10
+vertDrag:                   0.10
+parasDrag:                  0.01
+speedEps:                   0.0001
+
+
+
+mapTopic:                     '/voxel_map'
+dilateRadius:               0.5
+voxelWidth:                 0.15
+mapBound:                   [-25.0, 25.0, -25.0, 25.0, 0.0, 15.0]
+occupancy_resolution:      1.0 
+debug_output:              false #bool
+sta_threshold:             1 #int
+
+
+kernel_size:  15     #必须为奇数，一个kernel的bounding boxsize，乘以地图分辨率occupancy_resolution为kernel各轴的长度
+kernel_max_pitch: 45 
+kernel_max_roll:  45
+kernel_ang_res:   9   
+
+front_end_safeh:  0.0
+
+# ======= backend part ======= #
+
+enableearlyExit:            true  
+debugpause:                 1      
+
+smoothingEps:               1.0e-2   
+    
+integralIntervs:            64   
+      
+relCostTol:                 1.0e-16 
+relCostTolMidEnd:           1.0e-6 
+vmax:                       1000
+omgmax:                     1000
+thetamax:                   10000.0
+weight_v:                   1000.0       
+weight_a:                   1000.0      
+weight_p:                   4000.0     
+weight_pr:                  1000.0       
+weight_ar:                  32000.0      
+weight_omg:                 1000.0      
+weight_theta:               1000.0       
+rho_mid_end:                200
+rho:                        380       
+safety_hor:                 0.866    
+inittime:                   2.5 
+mem_size:                   16 # The default value is 8. Values less than 3 are not recommended. Large values will result in excessive computing time.
+past:                       10 #Distance for delta-based convergence test. This parameter determines the distance, in iterations, to compute the rate of decrease of the cost function
+min_step:                   1.0e-32 #The minimum step of the line search routine.The default value is 1.0e-20. This value need not be modified unless the exponents are too large for the machine being used, or unless the problem is extremely badly scaled (in which case the exponents should be increased).
+g_epsilon:                  0.0 #The default value is 1.0e-5.This should be greater than 1.0e-6 in practice because L-BFGS does not directly reduce first-order residual.
+# relCostTol:                 1.0e-7 #The default value is 1.0e-6.Delta for convergence test.This parameter determines the minimum rate of decrease of the cost function

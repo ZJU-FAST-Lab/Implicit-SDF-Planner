@@ -1,0 +1,70 @@
+<?xml version="2.0" encoding="utf-8"?>
+<launch>
+
+    <!-- <node pkg="utils" name="debug_sender" type="debug_sender_node" output="screen">
+    </node> -->
+
+    
+
+
+
+    <node pkg="debug_assistant" name="debug_monitor" type="main.py" output="screen">
+    </node>
+    
+    <node name="rviz" pkg="rviz" type="rviz" output="screen"
+        args="-d $(find plan_manager)/config/any_shape.rviz"> 
+    </node>
+
+    
+    
+     <node pkg="plan_manager" type="plan_manager" name="plan_manager_lmbm" output="screen"> 
+        <param name="use_lbfgs" value="false" />
+        <rosparam file="$(find plan_manager)/config/config_CappedCone.yaml" command="load" />
+    </node>
+
+     <!-- <node pkg="plan_manager" type="plan_manager" name="plan_manager_lbfgs" output="screen"> 
+        <param name="use_lbfgs" value="true" />
+        <rosparam file="$(find plan_manager)/config/config.yaml" command="load" />
+    </node> -->
+
+
+    <!-- trajectory server -->
+    <node pkg="plan_manager" name="traj_server" type="traj_server" output="screen">
+        <remap from="position_cmd"             to="drone_planning/pos_cmd"/>
+        <remap from="~planning/trajectory"     to="drone_planning/trajectory"/>
+        <param name="traj_server/time_forward" value="1.0" type="double"/>
+    </node>
+
+    <node pkg="poscmd_2_odom" name="poscmd_2_odom" type="poscmd_2_odom" output="screen">
+        <param name="init_x" value="0.0"/>
+        <param name="init_y" value="0.0"/>
+        <param name="init_z" value="0.0"/>
+        <remap from="~command" to="drone_planning/pos_cmd"/>
+        <remap from="~odometry" to="odom"/>
+    </node>
+
+    <node pkg="odom_visualization" name="odom_visualization" type="odom_visualization" output="screen">
+        <remap from="~odom" to="drone_visual_slam/odom"/>
+        <param name="color/a" value="1.0"/>
+        <param name="color/r" value="0.0"/>
+        <param name="color/g" value="0.0"/>
+        <param name="color/b" value="0.0"/>
+        <param name="covariance_scale" value="100.0"/>
+        <param name="robot_scale" value="0.35"/>
+        <param name="tf45" value="false"/>
+        <param name="drone_id" value="0"/>
+    </node>
+    
+<!-- 可视化SDF变化的小程序，便于后期出视频demo debug,可视化多个点的SDF替换IROS当中的图片说明 -->
+    <!-- <node pkg="sdf_vis" name="sdf_vis" type="main.py" output="screen">
+    </node> -->
+
+
+<!-- use program code globalmap generator注释掉之后在Unity中操作修改地图 -->
+	<include file="$(find map_manager)/launch/globalmap_gene.launch">
+		<arg name="map_id" value="4" />
+        <arg name="read_from_pcd" value="true" />
+        <arg name="pcd_file_name" value="CappedCone.pcd" />
+	</include>
+
+</launch>

@@ -1,0 +1,23 @@
+<launch>
+<arg name="map_id" default="4"/>
+<arg name="init_x" default="1.0" />
+<arg name="init_y" default="1.0" />
+<arg name="init_z" default="1.0" />
+<arg name="read_from_pcd" default="true" />
+<arg name="pcd_file_name" default="scene1.pcd" />
+
+    <node pkg="map_manager" name="globalmap_gene_node" type="globalmap_gene_node" output="screen">
+    	<param name="cloud_resolution" value="0.6"/>
+        <param name="map_id" value="$(arg map_id)" />
+        <param name="init_x" value="$(arg init_x)" />
+        <param name="init_y" value="$(arg init_y)" />
+        <param name="init_z" value="$(arg init_z)" />
+        <param name="read_from_pcd" value="$(arg read_from_pcd)" />
+        <param name="pcd_file_name" value="$(arg pcd_file_name)" />
+        <remap from="~globalmap" to="/globalmap"/>
+        <!--remap from="/globalmap" to="/camera/depth_registered/points"/-->
+
+    </node>
+
+
+</launch>
