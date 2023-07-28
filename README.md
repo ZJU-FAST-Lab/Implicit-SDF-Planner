@@ -22,7 +22,7 @@ Please cite the paper below if this repo helps you.
 
 - Some of the demos are our **further work** after the IROS conference, and a more general pipeline for whole-body planning of arbitrarily shaped robots with **Continuous Collision Safety Certification** is on the way.
   
-  #### Arbitrarily shaped robots fly over three consecutive narrow slits (with quadrotor dynamics)
+  #### 3D - Arbitrarily shaped robots fly over three consecutive narrow slits (with quadrotor dynamics)
   
   <div align="center">
   <img src="fig/3Ddemo1.gif" width="48%" />
@@ -34,7 +34,7 @@ Please cite the paper below if this repo helps you.
   <img src="fig/3Ddemo4.gif" width="48%" />
   </div>
 
-#### Arbitrarily shaped robots traverse the random map (with rotation decoupled from translation)
+#### 2D - Arbitrarily shaped robots traverse the random map (with rotation decoupled from translation)
 
 <div align="center">
   <img src="fig/2Ddemo1.gif" width="48%" />
@@ -46,7 +46,7 @@ Please cite the paper below if this repo helps you.
   <img src="fig/2Ddemo4.gif" width="48%" />
 </div>
 
-#### Continuous Collision Avoidance with Safety Certification (with rotation decoupled from translation)
+#### 2D - Continuous Collision Avoidance with Safety Certification (with rotation decoupled from translation)
 
 <div align="center">
   <img src="fig/CCA1.gif" width="95%" />
@@ -56,7 +56,7 @@ Please cite the paper below if this repo helps you.
   <img src="fig/CCA2.gif" width="95%" />
 </div>
 
-#### Obstacle avoidance planning for shape variant robots (with quadrotor dynamics)
+#### 3D - Obstacle avoidance planning for shape variant robots (with quadrotor dynamics)
 
 <div align="center">
   <img src="fig/scaledemo1.gif" width="95%" />
