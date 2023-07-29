@@ -1,14 +1,21 @@
 # Implicit-SDF-Planner
 
-
 **Related Paper**: 
-
-Please cite the paper below if this repo helps you.
 
 - [Continuous Implicit SDF Based Any-shape Robot Trajectory Optimization](https://arxiv.org/abs/2303.01330), Tingrui Zhang*, Jingping Wang*,Chao Xu, Alan Gao, Fei Gao.
 - Our paper is accepted at IROS2023, and we will release some of our code around the end of July.
 
+If you find this work useful in your research, please consider citing:
 
+```
+@INPROCEEDINGS{zhang2023continuous,
+  author={Zhang, Tingrui and Wang, Jingping and Xu, Chao and Gao, Alan and Gao, Fei},
+  booktitle={2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)}, 
+  title={Continuous Implicit SDF Based Any-shape Robot Trajectory Optimization}, 
+  year={2023},
+  volume={},
+  number={}}
+```
 
 * [Video on Youtube](https://www.youtube.com/watch?v=Sb6HaVMZWak&ab_channel=FeiGao) or [Video on Bilibili](https://www.bilibili.com/video/BV1Rg4y1E79w/?spm_id_from=333.999.0.0)
 
@@ -48,6 +55,8 @@ Please cite the paper below if this repo helps you.
 
 #### 2D - Continuous Collision Avoidance with Safety Certification (with rotation decoupled from translation)
 
+<img src="fig/2Ddemo.gif" width="80%">
+
 <div align="center">
   <img src="fig/CCA1.gif" width="95%" />
 </div>
@@ -84,8 +93,9 @@ roslaunch ego_planner demox.launch #(x=1,2,3...)
 ```
 
 - Then use "3D Nav Goal" in rviz or click on the "G" button on the keyboard to publish the goal for  navigation.
-**Note that the start and end points of the clicks must be within the map.**
-## More Examples (Some-shaped robots with uav dynamics)
+  **Note that the start and end points of the clicks must be within the map.**
+  
+  ## More Examples (Some-shaped robots with uav dynamics)
 
 ### 2D version and shape variant demos will be released later...
 
@@ -95,11 +105,10 @@ roslaunch ego_planner demox.launch #(x=1,2,3...)
 
 https://github.com/ZJU-FAST-Lab/Implicit-SDF-Planner/assets/83890569/df19362b-2827-4d36-93a2-d9ce9261f44d
 
-
 Have a cool example? Submit a PR! You can either extend the robot's shape arbitrarily via an obj file in [shapes](src/plan_manager/shapes).The code will automatically use libigl to get its SDF. You can also inherit from Generalshape in [Shape.hpp](src/utils/include/utils/Shape.hpp) to implement the desired shape and the associated SDF methods.For visualization purposes, you will also need a corresponding obj file for the robot shape. 
 
-
 **Supported Shapes now**
+
 <div style="display: flex; justify-content: center;">
   <table>
     <tr>
@@ -130,6 +139,7 @@ Have a cool example? Submit a PR! You can either extend the robot's shape arbitr
 </div>
 
 ## Tips
+
 1. We use OpenMp for parallel acceleration, so the "threads_num" in the yaml should be adjusted to improve performance. The recommended threads_num is about 1.5 times the number of logical cores on the machine.
 2. If users customize the shape, the obj file must be provided. We recommend using meshlab to generate obj files. For better performance, users can also implement corresponding SDF function, otherwise Libigl is used by default to compute the SDF.
 3. The kernel_size multiplied by the map resolution should not be too small, this value should be greater than the maximum length of the robot's shape. So the "kernel_size" in the yaml should be adjusted accordingly (not too small).
