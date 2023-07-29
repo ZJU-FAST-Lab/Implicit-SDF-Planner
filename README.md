@@ -55,8 +55,12 @@ If you find this work useful in your research, please consider citing:
 
 #### 2D - Continuous Collision Avoidance with Safety Certification (with rotation decoupled from translation)
 
-<img src="fig/2Ddemo.gif" width="80%">
 
+
+<div align="center">
+  <img src="fig/2Ddemo.gif" width="95%" />
+</div>
+<br>
 <div align="center">
   <img src="fig/CCA1.gif" width="95%" />
 </div>
