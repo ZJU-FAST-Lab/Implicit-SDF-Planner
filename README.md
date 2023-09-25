@@ -93,7 +93,7 @@ cd Implicit-SDF-Planner
 ./build.sh
 source devel/setup.bash #(If use bash)
 source devel/setup.zsh  #(If use zsh) 
-roslaunch ego_planner demox.launch #(x=1,2,3...)
+roslaunch plan_manager demox.launch #(x=1,2,3...)
 ```
 
 - Then use "3D Nav Goal" in rviz or click on the "G" button on the keyboard to publish the goal for  navigation.
