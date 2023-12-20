@@ -8,13 +8,15 @@
 If you find this work useful in your research, please consider citing:
 
 ```
-@INPROCEEDINGS{zhang2023continuous,
+@INPROCEEDINGS{10342104,
   author={Zhang, Tingrui and Wang, Jingping and Xu, Chao and Gao, Alan and Gao, Fei},
   booktitle={2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)}, 
-  title={Continuous Implicit SDF Based Any-shape Robot Trajectory Optimization}, 
+  title={Continuous Implicit SDF Based Any-Shape Robot Trajectory Optimization}, 
   year={2023},
   volume={},
-  number={}}
+  number={},
+  pages={282-289},
+  doi={10.1109/IROS55552.2023.10342104}}
 ```
 
 * [Video on Youtube](https://www.youtube.com/watch?v=Sb6HaVMZWak&ab_channel=FeiGao) or [Video on Bilibili](https://www.bilibili.com/video/BV1Rg4y1E79w/?spm_id_from=333.999.0.0)
