@@ -107,7 +107,7 @@ roslaunch plan_manager demox.launch #(x=1,2,3...)
 
 ### 3D version demos
 
-**You can click buttons on the screen to visualize the swept volume, stop the optimization process early, etc. Note that these visualizations only take effect after the second click of the button.**
+**You can click buttons on the screen to visualize the swept volume, stop the optimization process early, etc.**
 
 https://github.com/ZJU-FAST-Lab/Implicit-SDF-Planner/assets/83890569/df19362b-2827-4d36-93a2-d9ce9261f44d
 

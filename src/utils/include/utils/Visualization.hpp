@@ -23,7 +23,18 @@
 
 
 #define TRAJ_ORDER 5
-
+#define Delayforvis(pub,topic) \
+    do { \
+        double wait_time = 0.0; \
+        while (pub.getNumSubscribers() < 1) { \
+            ros::Duration(0.1).sleep(); \
+            wait_time += 0.1; \
+            if (wait_time > 0.5) { \
+                std::cout << "Looks like Topic " << topic << " is not subscribed by any subscriber. Check rviz config."<<std::endl; \
+                break; \
+            } \
+        } \
+    } while(0);
 
 // for visualization geometry
 using namespace Eigen;
@@ -256,6 +267,7 @@ namespace vis
             {
                 ros::Publisher pub = nh_.advertise<visualization_msgs::Marker>(topic, 10000);
                 publisher_map_[topic] = pub;
+                Delayforvis(pub,topic)
             }
             visualization_msgs::Marker marker;
             marker.header.frame_id = "map";
@@ -297,6 +309,7 @@ namespace vis
             {
                 ros::Publisher pub = nh_.advertise<visualization_msgs::Marker>(topic, 10000);
                 publisher_map_[topic] = pub;
+                 Delayforvis(pub,topic)
             }
             visualization_msgs::Marker marker;
             marker.header.frame_id = "map";
@@ -325,6 +338,7 @@ namespace vis
             {
                 ros::Publisher pub = nh_.advertise<sensor_msgs::PointCloud2>(topic, 10000);
                 publisher_map_[topic] = pub;
+                 Delayforvis(pub,topic)
             }
             pcl::PointCloud<pcl::PointXYZ> point_cloud;
             sensor_msgs::PointCloud2 point_cloud_msg;
@@ -353,6 +367,7 @@ namespace vis
             {
                 ros::Publisher pub = nh_.advertise<sensor_msgs::PointCloud2>(topic, 10000);
                 publisher_map_[topic] = pub;
+                 Delayforvis(pub,topic)
             }
             sensor_msgs::PointCloud2 point_cloud_msg;
             pcl::toROSMsg(pc, point_cloud_msg);
@@ -375,6 +390,7 @@ namespace vis
             {
                 ros::Publisher pub = nh_.advertise<nav_msgs::Path>(topic, 10000);
                 publisher_map_[topic] = pub;
+                 Delayforvis(pub,topic)
             }
             nav_msgs::Path path_msg;
             geometry_msgs::PoseStamped tmpPose;
@@ -413,6 +429,7 @@ namespace vis
                 ros::Publisher pub =
                     nh_.advertise<visualization_msgs::MarkerArray>(topic, 10000);
                 publisher_map_[topic] = pub;
+                 Delayforvis(pub,topic)
             }
             visualization_msgs::Marker marker;
             marker.header.frame_id = "map";
@@ -459,6 +476,7 @@ namespace vis
                 ros::Publisher pub =
                     nh_.advertise<visualization_msgs::MarkerArray>(topic, 10000);
                 publisher_map_[topic] = pub;
+                 Delayforvis(pub,topic)
             }
             visualization_msgs::Marker marker;
             marker.header.frame_id = "map";
@@ -512,6 +530,7 @@ namespace vis
                 ros::Publisher pub =
                     nh_.advertise<visualization_msgs::MarkerArray>(topic, 10000);
                 publisher_map_[topic] = pub;
+                 Delayforvis(pub,topic)
             }
             visualization_msgs::Marker marker;
             marker.header.frame_id = "map";
@@ -551,6 +570,7 @@ namespace vis
             {
                 ros::Publisher pub = nh_.advertise<visualization_msgs::Marker>(topic, 10000);
                 publisher_map_[topic] = pub;
+                 Delayforvis(pub,topic)
             }
             visualization_msgs::Marker marker;
             marker.header.frame_id = "map";
@@ -588,6 +608,7 @@ namespace vis
                 ros::Publisher pub =
                     nh_.advertise<visualization_msgs::MarkerArray>(topic, 10000);
                 publisher_map_[topic] = pub;
+                 Delayforvis(pub,topic)
             }
             visualization_msgs::Marker clear_previous_msg;
             clear_previous_msg.action = visualization_msgs::Marker::DELETEALL;
@@ -636,6 +657,7 @@ namespace vis
                 ros::Publisher pub =
                     nh_.advertise<visualization_msgs::Marker>(topic, 10000);
                 publisher_map_[topic] = pub;
+                 Delayforvis(pub,topic)
             }
 
             if(clear_old){
@@ -691,6 +713,7 @@ namespace vis
                 ros::Publisher pub =
                     nh_.advertise<visualization_msgs::Marker>(edge_topic, 10000);
                 publisher_map_[edge_topic] = pub;
+                 Delayforvis(pub,edge_topic)
             }
             visualization_msgs::Marker edgeMarker;
             edgeMarker.header.stamp = ros::Time::now();
@@ -735,6 +758,7 @@ namespace vis
                 ros::Publisher pub =
                     nh_.advertise<visualization_msgs::Marker>(edge_topic, 10000);
                 publisher_map_[edge_topic] = pub;
+                Delayforvis(pub,edge_topic)
             }
             visualization_msgs::Marker edgeMarker;
             edgeMarker.header.stamp = ros::Time::now();
@@ -788,6 +812,7 @@ namespace vis
                 ros::Publisher pub1 =
                     nh_.advertise<visualization_msgs::Marker>(meth_topic, 10000); // 有可能是队列长度不够导致可视化swept volume有问题
                 publisher_map_[meth_topic] = pub1;
+                Delayforvis(pub1,meth_topic)
             }
             auto got2 = publisher_map_.find(edge_topic);
             if (got2 == publisher_map_.end())
@@ -795,6 +820,7 @@ namespace vis
                 ros::Publisher pub2 =
                     nh_.advertise<visualization_msgs::Marker>(edge_topic, 10000);
                 publisher_map_[edge_topic] = pub2;
+                Delayforvis(pub2,edge_topic)
             }
 
             visualization_msgs::Marker meshMarker, edgeMarker;
@@ -873,7 +899,7 @@ namespace vis
                 ros::Publisher pub1 =
                     nh_.advertise<visualization_msgs::Marker>(meth_topic, 10000); // 有可能是队列长度不够导致可视化swept volume有问题
                 publisher_map_[meth_topic] = pub1;
-                // ROS_WARN_STREAM("mesh pub init");
+                Delayforvis(pub1,meth_topic)
             }
             auto got2 = publisher_map_.find(edge_topic);
             if (got2 == publisher_map_.end())
@@ -881,7 +907,7 @@ namespace vis
                 ros::Publisher pub2 =
                     nh_.advertise<visualization_msgs::Marker>(edge_topic, 10000);
                 publisher_map_[edge_topic] = pub2;
-                // ROS_WARN_STREAM("edge pub init");
+                Delayforvis(pub2,edge_topic)
             }
 
             visualization_msgs::Marker meshMarker, edgeMarker;
@@ -956,7 +982,6 @@ namespace vis
                     edgeMarker.points.push_back(point);
                 }
             }
-            // ROS_WARN_STREAM(" pub ");
             publisher_map_[edge_topic].publish(edgeMarker);
             publisher_map_[meth_topic].publish(meshMarker);
         }
@@ -979,6 +1004,7 @@ namespace vis
                 ros::Publisher pub1 =
                     nh_.advertise<visualization_msgs::Marker>(topic, 10000); // 有可能是队列长度不够导致可视化swept volume有问题
                 publisher_map_[topic] = pub1;
+                Delayforvis(pub1,topic)
             }
 
             visualization_msgs::Marker sphere, line_strip;
@@ -1037,6 +1063,7 @@ namespace vis
                 ros::Publisher pub1 =
                     nh_.advertise<visualization_msgs::Marker>(topic, 10000); // 有可能是队列长度不够导致可视化swept volume有问题
                 publisher_map_[topic] = pub1;
+                Delayforvis(pub1,topic)
             }
             
             Eigen::Vector3d pos;
@@ -1077,6 +1104,7 @@ namespace vis
                 ros::Publisher pub1 =
                     nh_.advertise<visualization_msgs::Marker>(topic, 10000); // 有可能是队列长度不够导致可视化swept volume有问题
                 publisher_map_[topic] = pub1;
+                Delayforvis(pub1,topic)
             }
             
             visualization_msgs::Marker line_strip;
@@ -1155,6 +1183,7 @@ namespace vis
                 ros::Publisher pub1 =
                     nh_.advertise<visualization_msgs::Marker>(topic, 10000); // 有可能是队列长度不够导致可视化swept volume有问题
                 publisher_map_[topic] = pub1;
+                Delayforvis(pub1,topic)
             }
             visualization_msgs::Marker traj_vis;
             traj_vis.header.stamp       = ros::Time::now();
