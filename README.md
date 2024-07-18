@@ -3,8 +3,7 @@
 **Related Paper**: 
 
 - [Continuous Implicit SDF Based Any-shape Robot Trajectory Optimization](https://arxiv.org/abs/2303.01330), Tingrui Zhang*, Jingping Wang*,Chao Xu, Alan Gao, Fei Gao.
-- Our paper is accepted at IROS2023, and we will release some of our code around the end of July.
-
+- Our paper is accepted at IROS2023. The extension of our work is accepted at siggraph2024&TOG, please refer to [Implicit-SVSDF-Planner](https://github.com/ZJU-FAST-Lab/Implicit-SVSDF-Planner) for more details.
 If you find this work useful in your research, please consider citing:
 
 ```
